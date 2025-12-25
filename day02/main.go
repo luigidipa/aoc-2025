@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -15,6 +16,7 @@ type idRange struct {
 
 func main() {
 	part1()
+	part2()
 }
 
 func part1() {
@@ -38,6 +40,20 @@ func part1() {
 	fmt.Println(res)
 }
 
+func part2() {
+	res := 0
+	input, _ := utils.ReadInput("./input.txt")
+	ranges := getRanges(input)
+	for _, r := range ranges {
+		for i := r.start; i <= r.end; i++ {
+			if isInvalidId(i) {
+				res += i
+			}
+		}
+	}
+	fmt.Println(res)
+}
+
 func getRanges(input string) []idRange {
 	toks := strings.Split(strings.Trim(input, "\n"), ",")
 	ranges := make([]idRange, len(toks))
@@ -51,4 +67,18 @@ func getRanges(input string) []idRange {
 		}
 	}
 	return ranges
+}
+
+func isInvalidId(n int) bool {
+	s := strconv.Itoa(n)
+	length := len(s)
+	for i := range length / 2 {
+		pattern := s[0 : i+1]
+		regex := "^(" + regexp.QuoteMeta(pattern) + ")+$"
+		match, _ := regexp.MatchString(regex, s)
+		if match {
+			return true
+		}
+	}
+	return false
 }
