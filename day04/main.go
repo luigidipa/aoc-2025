@@ -9,6 +9,7 @@ import (
 
 func main() {
 	part1()
+	part2()
 }
 
 func part1() {
@@ -35,6 +36,44 @@ func part1() {
 			if neighs < 4 {
 				res++
 			}
+		}
+	}
+	fmt.Println(res)
+}
+
+func part2() {
+	res := 0
+	grid := makeGrid("./input.txt")
+	rows, cols := len(grid), len(grid[0])
+	dirs := [][]int{{-1, 0}, {1, 0}, {0, 1}, {0, -1}, {-1, 1}, {-1, -1}, {1, 1}, {1, -1}}
+
+	for {
+		removed := false
+		for i := range rows {
+			for j := range cols {
+				if grid[i][j] != "@" {
+					continue
+				}
+
+				neighs := 0
+				for _, d := range dirs {
+					ni, nj := i+d[0], j+d[1]
+					if ni < 0 || ni >= rows || nj < 0 || nj >= cols {
+						continue
+					}
+					if grid[ni][nj] == "@" {
+						neighs++
+					}
+				}
+				if neighs < 4 {
+					grid[i][j] = "."
+					res++
+					removed = true
+				}
+			}
+		}
+		if !removed { // Break if no rolls were removed in this iteration
+			break
 		}
 	}
 	fmt.Println(res)
