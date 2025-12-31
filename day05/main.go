@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -10,6 +11,7 @@ import (
 
 func main() {
 	part1()
+	part2()
 }
 
 func part1() {
@@ -38,5 +40,44 @@ func part1() {
 			}
 		}
 	}
+	fmt.Println(res)
+}
+
+func part2() {
+	res := 0
+	lines := utils.ReadLines("./input.txt")
+	size := 0
+	for lines[size] != "" {
+		size++
+	}
+
+	ranges := make([][]int, size)
+	for i := range size {
+		toks := strings.Split(lines[i], "-")
+		start, _ := strconv.Atoi(toks[0])
+		end, _ := strconv.Atoi(toks[1])
+		ranges[i] = []int{start, end}
+	}
+	// Sort ranges on start time
+	sort.Slice(ranges, func(a, b int) bool {
+		return ranges[a][0] < ranges[b][0]
+	})
+
+	ps, pe := -1, -1
+	for _, r := range ranges {
+		s, e := r[0], r[1]
+		if s > pe { // no overlap
+			res += e - s + 1
+		} else if s == pe { // range starts where prev range ends
+			res += e - s
+		} else if s >= ps && e > pe { // overlap
+			res += e - pe
+		}
+		ps = s
+		if e > pe { // Only update end if greater than previous end. Not checking will break the algo
+			pe = e
+		}
+	}
+
 	fmt.Println(res)
 }
