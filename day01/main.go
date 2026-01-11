@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/sssdrum/aoc-2025/utils"
+	"github.com/luigidipa/aoc-2025/utils"
 )
 
 const LEN = 100

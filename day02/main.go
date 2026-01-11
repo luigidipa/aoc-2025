@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/sssdrum/aoc-2025/utils"
+	"github.com/luigidipa/aoc-2025/utils"
 )
 
 type idRange struct {

@@ -1,3 +1,3 @@
-module github.com/sssdrum/aoc-2025
+module github.com/luigidipa/aoc-2025
 
 go 1.24.11
