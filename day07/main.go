@@ -36,6 +36,37 @@ func advance(diagr [][]rune, r, c int) int {
 }
 
 func part2() {
+	diagr := makeDiagr()
+	timelnsCount := make([][]int, len(diagr))
+	res := 0
+
+	// Create matrix to keep count of timelines
+	for i := range timelnsCount {
+		timelnsCount[i] = make([]int, len(diagr[0]))
+	}
+
+	// Set point below startpoint to 1
+	timelnsCount[1][findStartPt(diagr)] = 1
+
+	for r := range len(diagr) - 1 {
+		for c := range len(diagr[0]) {
+			if timelnsCount[r][c] == 0 {
+				continue
+			}
+			if diagr[r+1][c] == '.' {
+				timelnsCount[r+1][c] += timelnsCount[r][c]
+			} else {
+				timelnsCount[r+1][c-1] += timelnsCount[r][c]
+				timelnsCount[r+1][c+1] += timelnsCount[r][c]
+			}
+		}
+	}
+
+	// Res is the sum of the last row
+	for _, t := range timelnsCount[len(timelnsCount)-1] {
+		res += t
+	}
+	fmt.Println(res)
 }
 
 func makeDiagr() [][]rune {
