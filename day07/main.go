@@ -8,40 +8,40 @@ import (
 
 func main() {
 	part1()
+	part2()
 }
 
 func part1() {
 	diagr := makeDiagr()
-	splits := 0
-	advance(diagr, 0, findStartPt(diagr), &splits)
+	splits := advance(diagr, 0, findStartPt(diagr))
 	fmt.Println(splits)
 }
 
-func advance(diagr [][]rune, line, pos int, splits *int) {
+func advance(diagr [][]rune, r, c int) int {
 	// Out of bounds
-	if pos < 0 || pos >= len(diagr[0]) || line == len(diagr)-1 {
-		return
+	if c < 0 || c >= len(diagr[0]) || r == len(diagr)-1 {
+		return 0
 	}
 	// Path was already traversed
-	if diagr[line+1][pos] == '|' {
-		return
+	if diagr[r+1][c] == '|' {
+		return 0
 	}
 	// Continue down
-	if diagr[line+1][pos] == '.' {
-		diagr[line+1][pos] = '|'
-		advance(diagr, line+1, pos, splits)
-		return
+	if diagr[r+1][c] == '.' {
+		diagr[r+1][c] = '|'
+		return advance(diagr, r+1, c)
 	}
 	// Split
-	*splits++
-	advance(diagr, line+1, pos-1, splits)
-	advance(diagr, line+1, pos+1, splits)
+	return 1 + advance(diagr, r+1, c-1) + advance(diagr, r+1, c+1)
+}
+
+func part2() {
 }
 
 func makeDiagr() [][]rune {
-	lines := utils.ReadLines("./input.txt")
-	diagr := make([][]rune, len(lines))
-	for i, l := range lines {
+	rs := utils.ReadLines("./input.txt")
+	diagr := make([][]rune, len(rs))
+	for i, l := range rs {
 		diagr[i] = []rune(l)
 	}
 	return diagr
